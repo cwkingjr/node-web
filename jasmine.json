@@ -1,0 +1,13 @@
+{
+  "spec_dir": "test",
+  "spec_files": [
+    "beforeAllSpec.js",
+    "specs/*.js"
+  ],
+  "helpers": [
+    "./node_modules/jasmine-expect/index.js",
+    "helpers/**/*.js"
+  ],
+  "stopSpecOnExpectationFailure": false,
+  "random": false
+}

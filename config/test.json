@@ -1,0 +1,7 @@
+{
+  "database": {
+    "name": "node_web_test",
+    "user": "node_web_test_user",
+    "password": "node_web_test_password"
+  }
+}
