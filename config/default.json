@@ -1,0 +1,13 @@
+{
+  "server": {
+    "port": 3000
+  },
+  "database": {
+    "name": "node_web",
+    "user": "node_web_user",
+    "password": "node_web_password",
+    "options": {
+      "logging": false
+    }
+  }
+}
