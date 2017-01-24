@@ -2,9 +2,10 @@
 
 const bodyParser = require('body-parser');
 const config = require('config');
-const db = require('src/services/db');
-const errorHandler = require('src/services/errorHandler');
 const express = require('express');
+
+const db = require('src/models');
+const errorHandler = require('src/services/errorHandler');
 const routes = require('src/routes');
 
 module.exports = {
@@ -27,7 +28,7 @@ function start() {
 	// Make sure the db is synced before starting the http server to ensure
 	// a request isn't accepted prior to any database structure changes being
 	// applied.
-	return db.instance.sync().then(function () {
+	return db.instance.sync({force:true}).then(function () {
 		return new Promise(function (resolve) {
 			const port = config.get('server.port');
 			const server = app.listen(port, function () {

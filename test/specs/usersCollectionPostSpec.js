@@ -1,9 +1,11 @@
 'use strict';
 
 const HttpStatus = require('http-status-codes');
-const request = require('test/request');
-const User = require('src/models/User');
 const R = require('ramda');
+
+const request = require('test/request');
+const {User} = require('src/models');
+
 
 describe('POST /users', function () {
 
@@ -91,11 +93,11 @@ describe('POST /users', function () {
 
 			{it: 'firstName undefined',	user: {firstName: undefined},			message: 'notNull Violation: firstName cannot be null'},
 			{it: 'firstName empty',		user: {firstName: ''},					message: 'Validation error: Validation len failed'},
-			{it: 'firstName long',		user: {firstName: 'f'.repeat(31)},		message: 'Validation error: Validation len failed'},
+			{it: 'firstName long',		user: {firstName: 'f'.repeat(36)},		message: 'Validation error: Validation len failed'},
 
 			{it: 'lastName undefined',	user: {lastName: undefined},			message: 'notNull Violation: lastName cannot be null'},
 			{it: 'lastName empty',		user: {lastName: ''},					message: 'Validation error: Validation len failed'},
-			{it: 'lastName long',		user: {lastName: 'l'.repeat(31)},		message: 'Validation error: Validation len failed'}
+			{it: 'lastName long',		user: {lastName: 'l'.repeat(36)},		message: 'Validation error: Validation len failed'}
 		];
 
 		runs.forEach(function (run) {

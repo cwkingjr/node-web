@@ -1,8 +1,15 @@
 'use strict';
 
-const cryptoService = require('src/services/cryptoService');
+const R = require('ramda');
 
+const cryptoService = require('src/services/cryptoService');
+const emailService = require('src/services/emailService');
+const {User} = require('src/models');
+
+const ALLOWED_INPUT_FIELDS = ['email', 'firstName', 'lastName', 'password'];
+const ALLOWED_OUTPUT_FIELDS = ['id', 'email', 'firstName', 'lastName', 'createdAt', 'updatedAt'];
 const MAX_VERIFICATION_CODE_HOURS = 24;
+
 
 function isPassword(user, password) {
 	return cryptoService
@@ -12,14 +19,6 @@ function isPassword(user, password) {
 		});
 }
 
-function isVerified(user) {
-	return user.isVerified === true;
-}
-
-function isVerificationCode(user, verificationCode) {
-	return user.verificationCode === verificationCode;
-}
-
 function isVerificationCodeTimeInWindow(user) {
 	const rightNow = new Date();
 	const createdAt = new Date(user.verificationCodeCreatedAt);
@@ -27,13 +26,48 @@ function isVerificationCodeTimeInWindow(user) {
 	return maxTime >= rightNow;
 }
 
+function resetForNewVerification(user) {
+	return cryptoService.generateVerificationCode()
+		.then(function (verificationCode) {
+			user.verificationCode = verificationCode;
+			user.verificationCodeCreatedAt = new Date;
+			return user.save();
+		});
+}
+
+function restrictInputFields(users) {
+	const restrictInput = R.pick(ALLOWED_INPUT_FIELDS);
+	return Array.isArray(users)
+		? R.map(restrictInput, users)
+		: restrictInput(users);
+}
+
+function restrictOutputFields(users) {
+	const restrictOutput = R.pick(ALLOWED_OUTPUT_FIELDS);
+	return Array.isArray(users)
+		? R.map(restrictOutput, users)
+		: restrictOutput(users);
+}
+
+function createUserAndSendVerificationEmail(email) {
+	return User
+		.findOrCreate({where: {email: email}})
+		.spread(function(user, created) {
+			if (!created) {
+				throw new Error('email is already in use');
+			} else {
+				return emailService.sendUserVerificationEmail(user);
+			}
+		});
+}
+
 function setAsVerified(user, password, verificationCode) {
 
-	if (isVerified(user)) {
+	if (user.isVerified === true) {
 		return Promise.reject('User already verified');
 	}
 
-	if (!isVerificationCode(user, verificationCode)) {
+	if (user.verificationCode !== verificationCode) {
 		return Promise.reject('Invalid verification code');
 	}
 
@@ -50,10 +84,18 @@ function setAsVerified(user, password, verificationCode) {
 		});
 }
 
+function verifyUser(email, password, verificationCode) {
+	return User
+		.findByEmail(email)
+		.then(function (user) {
+			return setAsVerified(user, password, verificationCode);
+		});
+}
+
 module.exports = {
-	isPassword,
-	isVerified,
-	isVerificationCode,
-	isVerificationCodeTimeInWindow,
-	setAsVerified
+	createUserAndSendVerificationEmail,
+	resetForNewVerification,
+	restrictInputFields,
+	restrictOutputFields,
+	verifyUser
 };
