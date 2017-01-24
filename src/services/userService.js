@@ -35,18 +35,17 @@ function resetForNewVerification(user) {
 		});
 }
 
+function restrictFields(users, fields) {
+	const restrict = R.pick(fields);
+	return Array.isArray(users) ? R.map(restrict, users) : restrict(users);
+}
+
 function restrictInputFields(users) {
-	const restrictInput = R.pick(ALLOWED_INPUT_FIELDS);
-	return Array.isArray(users)
-		? R.map(restrictInput, users)
-		: restrictInput(users);
+	return restrictFields(users, ALLOWED_INPUT_FIELDS);
 }
 
 function restrictOutputFields(users) {
-	const restrictOutput = R.pick(ALLOWED_OUTPUT_FIELDS);
-	return Array.isArray(users)
-		? R.map(restrictOutput, users)
-		: restrictOutput(users);
+	return restrictFields(users, ALLOWED_OUTPUT_FIELDS);
 }
 
 function createUserAndSendVerificationEmail(email) {
