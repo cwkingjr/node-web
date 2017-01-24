@@ -1,7 +1,7 @@
 'use strict';
 
 const request = require('test/request');
-const User = require('src/models/User');
+const {User} = require('src/models');
 
 describe('GET /users', function () {
 
@@ -25,7 +25,9 @@ describe('GET /users', function () {
 		beforeEach(function (done) {
 			User.bulkCreate([
 				{email: 'bob@evans.com', password: 'passwordpassword', firstName: 'Bob', lastName: 'Evans'}
-			]).then(done);
+			])
+			.then(done)
+			.catch(done.fail);
 		});
 
 		it('responds with an array of one value', function (done) {
