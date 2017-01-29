@@ -3,16 +3,16 @@
 const request = require('test/request');
 const {User} = require('src/models');
 
-describe('GET /users', function () {
+describe('GET /users', () => {
 
-	beforeEach(function (done) {
+	beforeEach( done => {
 		User.destroy({where: {}}).then(done);
 	});
 
-	describe('when there are no users', function () {
+	describe('when there are no users', () => {
 
-		it('responds with an empty array', function(done) {
-			request('/users', function (err, res, body) {
+		it('responds with an empty array', done => {
+			request('/users', (err, res, body) => {
 				expect(res.statusCode).toBe(200);
 				expect(body).toEqual([]);
 				done();
@@ -20,9 +20,9 @@ describe('GET /users', function () {
 		});
 	});
 
-	describe('when there is one user', function () {
+	describe('when there is one user', () => {
 
-		beforeEach(function (done) {
+		beforeEach( done => {
 			User.bulkCreate([
 				{email: 'bob@evans.com', password: 'passwordpassword', firstName: 'Bob', lastName: 'Evans'}
 			])
@@ -30,8 +30,8 @@ describe('GET /users', function () {
 			.catch(done.fail);
 		});
 
-		it('responds with an array of one value', function (done) {
-			request('/users', function (err, res, body) {
+		it('responds with an array of one value', done => {
+			request('/users', (err, res, body) => {
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArrayOfUsers();
 				expect(body.length).toBe(1);
@@ -43,9 +43,9 @@ describe('GET /users', function () {
 		});
 	});
 
-	describe('when there are three users', function () {
+	describe('when there are three users', () => {
 
-		beforeEach(function (done) {
+		beforeEach( done => {
 			User.bulkCreate([
 				{email: 'bob@evans.com', password: 'passwordpassword', firstName: 'Bob', lastName: 'Evans'},
 				{email: 'sara@lee.com', password: 'passwordpassword', firstName: 'Sara', lastName: 'Lee'},
@@ -53,8 +53,8 @@ describe('GET /users', function () {
 			]).then(done);
 		});
 
-		it('responds with an array of three values', function (done) {
-			request('/users', function (err, res, body) {
+		it('responds with an array of three values', done => {
+			request('/users', (err, res, body) => {
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArrayOfUsers();
 				expect(body.length).toBe(3);

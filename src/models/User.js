@@ -2,7 +2,7 @@
 
 const cryptoService = require('src/services/cryptoService');
 
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
 
 	const User = sequelize.define('User', {
 		email: {
@@ -63,18 +63,18 @@ module.exports = function (sequelize, DataTypes) {
 			}
 		},
 		hooks: {
-			beforeCreate: function (user) {
+			beforeCreate: user => {
 				return cryptoService
                     .generateSalt()
-                    .then(function (salt) {
+                    .then( salt => {
                         user.passwordSalt = salt;
                         return cryptoService.hashPassword(user.password, salt);
                     })
-                    .then(function (hashedPassword) {
+                    .then( hashedPassword => {
                         user.passwordHash = hashedPassword;
                         return cryptoService.generateVerificationCode();
                     })
-                    .then(function (verificationCode) {
+                    .then( verificationCode => {
                         user.verificationCode = verificationCode;
                         user.verificationCodeCreatedAt = new Date;
                     });
