@@ -28,7 +28,7 @@ function isVerificationCodeTimeInWindow(user) {
 
 function resetForNewVerification(user) {
 	return cryptoService.generateVerificationCode()
-		.then(function (verificationCode) {
+		.then( verificationCode => {
 			user.verificationCode = verificationCode;
 			user.verificationCodeCreatedAt = new Date;
 			return user.save();
@@ -51,9 +51,9 @@ function restrictOutputFields(users) {
 function createUserAndSendVerificationEmail(email) {
 	return User
 		.findOrCreate({where: {email: email}})
-		.spread(function(user, created) {
+		.spread( (user, created) => {
 			if (!created) {
-				throw new Error('email is already in use');
+				throw new Error('Email is already in use');
 			} else {
 				return emailService.sendUserVerificationEmail(user);
 			}
@@ -86,7 +86,7 @@ function setAsVerified(user, password, verificationCode) {
 function verifyUser(email, password, verificationCode) {
 	return User
 		.findByEmail(email)
-		.then(function (user) {
+		.then( user => {
 			return setAsVerified(user, password, verificationCode);
 		});
 }

@@ -10,7 +10,7 @@ const SALT_LENGTH = 20;
 
 function generateRandomString(stringLength) {
 	return new Promise(function (resolve, reject) {
-		crypto.randomBytes(stringLength, function (err, buf) {
+		crypto.randomBytes(stringLength, (err, buf) => {
 			if (err) {
 				return reject(err);
 			}
@@ -29,11 +29,11 @@ function generateVerificationCode() {
 }
 
 function hashPassword(password, salt) {
-	return new Promise(function (resolve, reject) {
+	return new Promise( (resolve, reject) => {
 		if (!password || !salt) {
 			return reject(new Error('hashPassword requires a password and salt'));
 		}
-		crypto.pbkdf2(password, salt, NUM_HASH_ITERATIONS, KEY_LENGTH, HASH_DIGEST, function (err, hashRaw) {
+		crypto.pbkdf2(password, salt, NUM_HASH_ITERATIONS, KEY_LENGTH, HASH_DIGEST, (err, hashRaw) => {
 			if (err) {
 				return reject(err);
 			}

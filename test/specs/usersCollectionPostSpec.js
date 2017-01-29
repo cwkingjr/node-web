@@ -7,13 +7,13 @@ const request = require('test/request');
 const {User} = require('src/models');
 
 
-describe('POST /users', function () {
+describe('POST /users', () => {
 
-	beforeEach(function (done) {
+	beforeEach( done => {
 		User.destroy({where: {}}).then(done);
 	});
 
-	it('returns the user when one is created', function(done) {
+	it('returns the user when one is created', done => {
 		request({
 			method: 'POST',
 			url: '/users',
@@ -23,7 +23,7 @@ describe('POST /users', function () {
 				firstName: 'Firstname',
 				lastName: 'Lastname'
 			}
-		}, function (err, res, body) {
+		}, (err, res, body) => {
 			expect(res.statusCode).toBe(HttpStatus.CREATED);
 			expect(body).toBeUser();
 			expect(body.email).toBe('gooduser@test.com');
@@ -33,7 +33,7 @@ describe('POST /users', function () {
 		});
 	});
 
-	it('filters out non-allowed input fields', function(done) {
+	it('filters out non-allowed input fields', done => {
 		request({
 			method: 'POST',
 			url: '/users',
@@ -51,7 +51,7 @@ describe('POST /users', function () {
 				createdAt: new Date('2016-10-04T04:33:31.280Z'),
 				updatedAt: new Date('2016-10-04T04:33:31.280Z')
 			}
-		}, function (err, res, body) {
+		}, (err, res, body) => {
 			expect(res.statusCode).toBe(HttpStatus.CREATED);
 			expect(body).toBeUser();
 			expect(body.email).toBe('hacker@test.com');
@@ -59,7 +59,7 @@ describe('POST /users', function () {
 			expect(body.lastName).toBe('Lastname');
 
 			User.findById(body.id)
-			.then(function(user){
+			.then( user => {
 				expect(user.id).not.toBe(99999999999999);
 				expect(user.passwordHash).not.toBe('injected-hash');
 				expect(user.passwordSalt).not.toBe('injected-salt');
@@ -74,7 +74,7 @@ describe('POST /users', function () {
 		});
 	});
 
-	describe('returns an error when the input is invalid', function () {
+	describe('returns an error when the input is invalid', () => {
 
 		const validUser = {
 			email: 'valid@email.com',
@@ -100,13 +100,13 @@ describe('POST /users', function () {
 			{it: 'lastName long',		user: {lastName: 'l'.repeat(36)},		message: 'Validation error: Validation len failed'}
 		];
 
-		runs.forEach(function (run) {
-			it(`(${run.it})`, function (done) {
+		runs.forEach( run => {
+			it(`(${run.it})`, done => {
 				request({
 					method: 'POST',
 					url: '/users',
 					body: R.merge(validUser, run.user)
-				}, function (err, res, body) {
+				}, (err, res, body) => {
 					expect(res.statusCode).toBe(HttpStatus.BAD_REQUEST);
 					expect(body.message).toBe(run.message);
 					done();
@@ -115,9 +115,9 @@ describe('POST /users', function () {
 		});
 	});
 
-	describe('when a user already exists', function () {
+	describe('when a user already exists', () => {
 
-		beforeEach(function (done) {
+		beforeEach( done => {
 			const user = {
 				email: 'duplicateemail@test.com',
 				password: 'passwordpassword',
@@ -127,7 +127,7 @@ describe('POST /users', function () {
 			User.create(user).then(done);
 		});
 
-		it('returns an error when the email is a duplicate', function(done) {
+		it('returns an error when the email is a duplicate', done => {
 			request({
 				method: 'POST',
 				url: '/users',
@@ -137,7 +137,7 @@ describe('POST /users', function () {
 					firstName: 'Firstname',
 					lastName: 'Lastname'
 				}
-			}, function (err, res, body) {
+			}, (err, res, body) => {
 				expect(res.statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 				expect(body.message).toBe('Validation error');
 				done();
