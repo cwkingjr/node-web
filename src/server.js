@@ -32,8 +32,11 @@ function start() {
 		return new Promise(function (resolve) {
 			const port = config.get('server.port');
 			const server = app.listen(port, function () {
+				/* eslint-disable */
+				// console.log is fine in node, just not browser
 				console.log(`Starting app with environment of [${app.get('env')}]`);
 				console.log(`Server listening on port [${server.address().port}]`);
+				/* eslint-enable */
 				resolve(server);
 			});
 		});

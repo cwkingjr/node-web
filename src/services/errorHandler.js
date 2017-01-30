@@ -15,6 +15,10 @@ function handleError(err, req, res, next) {
 		message: err.message || HttpStatus.getStatusText(status),
 		error: req.app.get('env') === 'development' ? err : {}
 	});
+
+	// Will never get here but this shuts up eslint unused var warning on
+	// 'next', which is required for error middleware signature match
+	next(err);
 }
 
 function handleSequelizeError(err, req, res, next) {
