@@ -26,9 +26,9 @@ describe('POST /user-verifications', function () {
 		User
 			.findByEmail('bob@evans.com')
 			.then( user => {
-				expect(user.isVerified).toBeFalse;
-				expect(user.verificationCode).notToBeNull;
-				expect(user.verificationCodeCreatedAt).notToBeNull;
+				expect(user.isVerified).toBeFalse();
+				expect(user.verificationCode).not.toBeNull();
+				expect(user.verificationCodeCreatedAt).not.toBeNull();
 
 				const myRequestParams = {
 					method: 'POST',
@@ -45,9 +45,9 @@ describe('POST /user-verifications', function () {
 						.findByEmail('bob@evans.com')
 						.then( verifieduser => {
 							expect(res.statusCode).toBe(HttpStatus.OK);
-							expect(verifieduser.isVerified).toBeTrue;
-							expect(verifieduser.verificationCode).toBeNull;
-							expect(verifieduser.verificationCodeCreatedAt).toBeNull;
+							expect(verifieduser.isVerified).toBeTrue();
+							expect(verifieduser.verificationCode).toBeNull();
+							expect(verifieduser.verificationCodeCreatedAt).toBeNull();
 							done();
 						})
 						.catch(done.fail);
