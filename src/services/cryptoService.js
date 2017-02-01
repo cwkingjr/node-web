@@ -9,7 +9,7 @@ const VERIFICATION_CODE_LENGTH = 25;
 const SALT_LENGTH = 20;
 
 function generateRandomString(stringLength) {
-	return new Promise(function (resolve, reject) {
+	return new Promise( (resolve, reject) => {
 		crypto.randomBytes(stringLength, (err, buf) => {
 			if (err) {
 				return reject(err);

@@ -23,8 +23,8 @@
     "eslint": "npm run eslint-test; npm run eslint-prod;",
     "eslint-prod": "eslint -c .eslintrc.prod.json src/** ./*.js; exit 0",
     "eslint-test": "eslint -c .eslintrc.test.json test/**; exit 0",
-    "start": "node index.js",
-    "test": "NODE_ENV=test jasmine JASMINE_CONFIG_PATH=jasmine.json"
+    "start": "node --harmony index.js",
+    "test": "NODE_ENV=test JASMINE_CONFIG_PATH=jasmine.json node --harmony node_modules/jasmine/bin/jasmine.js"
   },
   "dependencies": {
     "body-parser": "^1.13.2",

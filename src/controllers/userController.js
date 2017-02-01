@@ -1,6 +1,7 @@
 'use strict';
 
 const HttpStatus = require('http-status-codes');
+
 const {User} = require('src/models');
 const userService = require('src/services/userService');
 

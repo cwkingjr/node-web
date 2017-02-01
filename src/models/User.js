@@ -63,21 +63,34 @@ module.exports = (sequelize, DataTypes) => {
 			}
 		},
 		hooks: {
-			beforeCreate: user => {
-				return cryptoService
-                    .generateSalt()
-                    .then( salt => {
-                        user.passwordSalt = salt;
-                        return cryptoService.hashPassword(user.password, salt);
-                    })
-                    .then( hashedPassword => {
-                        user.passwordHash = hashedPassword;
-                        return cryptoService.generateVerificationCode();
-                    })
-                    .then( verificationCode => {
-                        user.verificationCode = verificationCode;
-                        user.verificationCodeCreatedAt = new Date;
-                    });
+            beforeCreate: async user => {
+                let salt, hashedPassword, verificationCode;
+
+                try {
+                    salt = await cryptoService.generateSalt();
+                }
+                catch(e) {
+                    throw(e);
+                }
+
+                try {
+                    hashedPassword = await cryptoService.hashPassword(user.password, salt);
+                }
+                catch(e) {
+                    throw(e);
+                }
+
+                try {
+                    verificationCode = await cryptoService.generateVerificationCode();
+                }
+                catch(e) {
+                    throw(e);
+                }
+
+                user.passwordSalt = salt;
+                user.passwordHash = hashedPassword;
+                user.verificationCode = verificationCode;
+                user.verificationCodeCreatedAt = new Date;
 			}
 		}
 	});
