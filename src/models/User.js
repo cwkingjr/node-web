@@ -64,28 +64,9 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		hooks: {
             beforeCreate: async user => {
-                let salt, hashedPassword, verificationCode;
-
-                try {
-                    salt = await cryptoService.generateSalt();
-                }
-                catch(e) {
-                    throw(e);
-                }
-
-                try {
-                    hashedPassword = await cryptoService.hashPassword(user.password, salt);
-                }
-                catch(e) {
-                    throw(e);
-                }
-
-                try {
-                    verificationCode = await cryptoService.generateVerificationCode();
-                }
-                catch(e) {
-                    throw(e);
-                }
+                let salt = await cryptoService.generateSalt();
+                let hashedPassword = await cryptoService.hashPassword(user.password, salt);
+                let verificationCode = await cryptoService.generateVerificationCode();
 
                 user.passwordSalt = salt;
                 user.passwordHash = hashedPassword;
