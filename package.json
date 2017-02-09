@@ -29,8 +29,10 @@
   "dependencies": {
     "body-parser": "^1.13.2",
     "config": "^1.21.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.13.1",
     "http-status-codes": "^1.0.6",
+    "jsonwebtoken": "^7.2.1",
     "pg": "^6.1.0",
     "rootpath": "^0.1.2",
     "sequelize": "^3.24.2"

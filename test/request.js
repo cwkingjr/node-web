@@ -1,7 +1,8 @@
 'use strict';
 
-const config = require('config');
 const request = require('request');
+
+const config = require('config');
 
 const port = config.get('server.port');
 
