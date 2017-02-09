@@ -1,10 +1,12 @@
 'use strict';
 
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const config = require('config');
 const express = require('express');
 
 const db = require('src/models');
+const authHandler = require('src/services/authHandler');
 const errorHandler = require('src/services/errorHandler');
 const routes = require('src/routes');
 
@@ -21,6 +23,8 @@ function start() {
 
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: false }));
+	app.use(cookieParser());
+	app.use(authHandler.processAuthCookie);
 	app.use('/', routes);
 	app.use(errorHandler.handleSequelizeError);
 	app.use(errorHandler.handleError);

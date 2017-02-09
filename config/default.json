@@ -9,5 +9,8 @@
     "options": {
       "logging": false
     }
-  }
+  },
+  "authTokenTimeout": "1d",
+  "authCookieTimeout": 86400,
+  "jwtSecret": "changeme-changeme-changeme"
 }
