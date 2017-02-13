@@ -65,27 +65,4 @@ describe('POST /user-verifications', function () {
 		})
 		.catch(done.fail);
 	});
-
-	it('processes returned auth cookie', function(done) {
-		const cookieJar = request.jar();
-		// 2nd param must match request baseUrl for it to send cookie
-		cookieJar.setCookie(cookie, 'http://localhost:3000/');
-		//cookieJar.setCookie(cookie, request.baseUrl);
-
-		const params = {
-			method: 'GET',
-			url: '/users',
-			jar: cookieJar
-		};
-
-		request( params, function (err, res, body) {
-			if (err) {
-				console.log('get users error:',err);
-				done.fail();
-			}
-			console.log('userId:' + res.userId);
-			expect(res.userId).not.toMatch("undefined");
-			done();
-		});
-	});
 });

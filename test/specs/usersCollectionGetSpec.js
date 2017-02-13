@@ -2,6 +2,9 @@
 
 const request = require('test/request');
 const {User} = require('src/models');
+const {createVerifiedBobEvans} = require('test/helpers/usersHelper');
+
+let cookie;
 
 describe('GET /users', () => {
 
@@ -9,12 +12,13 @@ describe('GET /users', () => {
 		User.destroy({where: {}}).then(done);
 	});
 
-	describe('when there are no users', () => {
+	describe('when auth_token missing', () => {
 
-		it('responds with an empty array', done => {
+		it('responds with unauthorized', done => {
 			request('/users', (err, res, body) => {
-				expect(res.statusCode).toBe(200);
-				expect(body).toEqual([]);
+				expect(res.statusCode).toBe(401);
+				expect(res.statusMessage).toBe('Unauthorized');
+				expect(body.error).toEqual('Authentication required');
 				done();
 			});
 		});
@@ -23,15 +27,26 @@ describe('GET /users', () => {
 	describe('when there is one user', () => {
 
 		beforeEach( done => {
-			User.bulkCreate([
-				{email: 'bob@evans.com', password: 'passwordpassword', firstName: 'Bob', lastName: 'Evans'}
-			])
-			.then(done)
+			createVerifiedBobEvans()
+			.then(cookieVal => {
+				cookie = cookieVal;
+				done();
+			})
 			.catch(done.fail);
 		});
 
 		it('responds with an array of one value', done => {
-			request('/users', (err, res, body) => {
+
+			const cookieJar = request.jar();
+			cookieJar.setCookie(cookie, 'http://localhost:3000/');
+
+			const params = {
+				method: 'GET',
+				url: '/users',
+				jar: cookieJar
+			};
+
+			request(params, (err, res, body) => {
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArrayOfUsers();
 				expect(body.length).toBe(1);
@@ -47,14 +62,29 @@ describe('GET /users', () => {
 
 		beforeEach( done => {
 			User.bulkCreate([
-				{email: 'bob@evans.com', password: 'passwordpassword', firstName: 'Bob', lastName: 'Evans'},
 				{email: 'sara@lee.com', password: 'passwordpassword', firstName: 'Sara', lastName: 'Lee'},
 				{email: 'jim@beam.com', password: 'passwordpassword', firstName: 'Jim', lastName: 'Beam'}
-			]).then(done);
+			])
+			.then(createVerifiedBobEvans)
+			.then(cookieVal => {
+				cookie = cookieVal;
+				done();
+			})
+			.catch(done.fail);
 		});
 
 		it('responds with an array of three values', done => {
-			request('/users', (err, res, body) => {
+
+			const cookieJar = request.jar();
+			cookieJar.setCookie(cookie, 'http://localhost:3000/');
+
+			const params = {
+				method: 'GET',
+				url: '/users',
+				jar: cookieJar
+			};
+
+			request(params, (err, res, body) => {
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArrayOfUsers();
 				expect(body.length).toBe(3);

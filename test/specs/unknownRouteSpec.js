@@ -1,6 +1,7 @@
 'use strict';
 
 const HttpStatus = require('http-status-codes');
+
 const request = require('test/request');
 
 describe('GET /unknown-route', () => {

@@ -7,10 +7,10 @@ const {User} = require('src/models');
 const authService = require('src/services/authService');
 const userService = require('src/services/userService');
 
-module.exports = {
-	list,
-	register,
-	verify
+const cookieOptions = {
+	expires: new Date(Date.now() + config.authCookieTimeout),
+	httpOnly: true
+	//, secure: true
 };
 
 function list(req, res, next) {
@@ -21,7 +21,7 @@ function list(req, res, next) {
 		.catch(next);
 }
 
-function register(req, res, next){
+function register(req, res, next) {
 	User
 		.create(userService.restrictInputFields(req.body))
 		.then(userService.restrictOutputFields)
@@ -37,12 +37,14 @@ function verify(req, res, next) {
 		.verifyUser(req.body.email, req.body.password, req.body.verificationCode)
 		.then(userService.restrictOutputFields)
 		.then( user => {
-			res.cookie('auth_token', authService.createAuthToken(user), {
-				expires: new Date(Date.now() + config.authCookieTimeout),
-				httpOnly: true
-				//, secure: true
-			});
+			res.cookie('auth_token', authService.createAuthToken(user), cookieOptions);
 			return res.json(user);
 		})
 		.catch(next);
 }
+
+module.exports = {
+	list,
+	register,
+	verify
+};
