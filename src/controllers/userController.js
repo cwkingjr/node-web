@@ -5,6 +5,7 @@ const HttpStatus = require('http-status-codes');
 const config = require('config');
 const {User} = require('src/models');
 const authService = require('src/services/authService');
+const emailService = require('src/services/emailService');
 const userService = require('src/services/userService');
 
 const cookieOptions = {
@@ -22,8 +23,9 @@ function list(req, res, next) {
 }
 
 function register(req, res, next) {
-	User
-		.create(userService.restrictInputFields(req.body))
+	userService
+		.createUser(userService.restrictInputFields(req.body))
+		.then(emailService.sendUserVerificationEmail)
 		.then(userService.restrictOutputFields)
 		.then(user => {
 			res.status(HttpStatus.CREATED);
