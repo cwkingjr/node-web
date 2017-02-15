@@ -2,6 +2,7 @@
 
 const R = require('ramda');
 
+const errors = require('src/services/customErrors');
 const cryptoService = require('src/services/cryptoService');
 const {User} = require('src/models');
 
@@ -74,11 +75,24 @@ function createUser(reqBody) {
 	return User
 		.findByEmail(reqBody.email)
 		.then( user => {
-			return Promise.reject('Email is already in use');
+			return Promise.reject(new errors.ForbiddenError('Email is already in use'));
 		})
 		.catch( err => {
 			return User.create(reqBody);
 		});
+}
+
+async function loginUser(email, password) {
+	let user = await User.findByEmail(email);
+	let pwMatches = await isPassword(user, password);
+
+	if (pwMatches !== true ) {
+		return Promise.reject(new errors.UnauthorizedError('Password incorrect'));
+	}
+	if (user.isVerified !== true) {
+		return Promise.reject(new errors.ForbiddenError('User is not verified'));
+	}
+	return Promise.resolve(user);
 }
 
 function verifyUser(email, password, verificationCode) {
@@ -91,6 +105,7 @@ function verifyUser(email, password, verificationCode) {
 
 module.exports = {
 	createUser,
+	loginUser,
 	resetForNewVerification,
 	restrictInputFields,
 	restrictOutputFields,

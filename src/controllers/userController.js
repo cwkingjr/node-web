@@ -14,6 +14,17 @@ const cookieOptions = {
 	//, secure: true
 };
 
+function login(req, res, next) {
+	userService
+		.loginUser(req.body.email, req.body.password)
+		.then(userService.restrictOutputFields)
+		.then( user => {
+			res.cookie('auth_token', authService.createAuthToken(user), cookieOptions);
+			return res.json(user);
+		})
+		.catch(next);
+}
+
 function list(req, res, next) {
 	User
 		.findAll()
@@ -47,6 +58,7 @@ function verify(req, res, next) {
 
 module.exports = {
 	list,
+	login,
 	register,
 	verify
 };
