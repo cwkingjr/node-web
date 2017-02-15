@@ -3,7 +3,6 @@
 const R = require('ramda');
 
 const cryptoService = require('src/services/cryptoService');
-const emailService = require('src/services/emailService');
 const {User} = require('src/models');
 
 const ALLOWED_INPUT_FIELDS = ['email', 'firstName', 'lastName', 'password'];
@@ -48,18 +47,6 @@ function restrictOutputFields(users) {
 	return restrictFields(users, ALLOWED_OUTPUT_FIELDS);
 }
 
-function createUserAndSendVerificationEmail(email) {
-	return User
-		.findOrCreate({where: {email: email}})
-		.spread( (user, created) => {
-			if (!created) {
-				throw new Error('Email is already in use');
-			} else {
-				return emailService.sendUserVerificationEmail(user);
-			}
-		});
-}
-
 function setAsVerified(user, password, verificationCode) {
 
 	if (user.isVerified === true) {
@@ -83,6 +70,17 @@ function setAsVerified(user, password, verificationCode) {
 		});
 }
 
+function createUser(reqBody) {
+	return User
+		.findByEmail(reqBody.email)
+		.then( user => {
+			return Promise.reject('Email is already in use');
+		})
+		.catch( err => {
+			return User.create(reqBody);
+		});
+}
+
 function verifyUser(email, password, verificationCode) {
 	return User
 		.findByEmail(email)
@@ -92,7 +90,7 @@ function verifyUser(email, password, verificationCode) {
 }
 
 module.exports = {
-	createUserAndSendVerificationEmail,
+	createUser,
 	resetForNewVerification,
 	restrictInputFields,
 	restrictOutputFields,
