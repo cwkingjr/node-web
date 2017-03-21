@@ -25,6 +25,11 @@ function login(req, res, next) {
 		.catch(next);
 }
 
+function logout(req, res, next) {
+	res.clearCookie('auth_token');
+	res.redirect(200, '/user-logins');
+}
+
 function list(req, res, next) {
 	User
 		.findAll()
@@ -59,6 +64,7 @@ function verify(req, res, next) {
 module.exports = {
 	list,
 	login,
+	logout,
 	register,
 	verify
 };
