@@ -16,7 +16,7 @@ module.exports = {
 // Returns a promise that resolves to the started server. This allows
 // integration tests to wait until the server is started before executing
 // any tests.
-function start() {
+async function start() {
 
 	const app = express();
 
@@ -30,17 +30,22 @@ function start() {
 	// Make sure the db is synced before starting the http server to ensure
 	// a request isn't accepted prior to any database structure changes being
 	// applied.
-	return db.instance.sync({force:true}).then(function () {
-		return new Promise(function (resolve) {
-			const port = config.get('server.port');
-			const server = app.listen(port, function () {
-				/* eslint-disable */
-				// console.log is fine in node, just not browser
-				console.log(`Starting app with environment of [${app.get('env')}]`);
-				console.log(`Server listening on port [${server.address().port}]`);
-				/* eslint-enable */
-				resolve(server);
-			});
+	if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'test') {
+		// force the db sync
+		await db.instance.sync({force:true});
+	} else {
+		// error on DDL changes -- expect devops to migrate prod
+		await db.instance.sync();
+	}
+	
+	return new Promise(resolve => {
+		const port = config.get('server.port');
+		const server = app.listen(port, () => {
+			/* eslint-disable */
+			console.log(`Starting app with environment of [${process.env.NODE_ENV}]`);
+			console.log(`Server listening on port [${server.address().port}]`);
+			/* eslint-enable */
+			resolve(server);
 		});
 	});
 }
