@@ -1,6 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
+
 const controllers = require('src/controllers');
 const {requireAuth} = require('src/services/authHandler');
 

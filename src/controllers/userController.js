@@ -1,8 +1,8 @@
 'use strict';
 
 const HttpStatus = require('http-status-codes');
-
 const config = require('config');
+
 const {User} = require('src/models');
 const authService = require('src/services/authService');
 const emailService = require('src/services/emailService');
