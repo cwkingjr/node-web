@@ -1,5 +1,7 @@
 "use strict";
 
+// load up all models and their associations
+
 const fs = require('fs');
 const path = require('path');
 
@@ -9,18 +11,18 @@ const db = {};
 
 fs
 	.readdirSync(__dirname)
-	.filter(function (file) {
+	.filter(file => {
 		// grab only the model files
 		return (file.indexOf('.') !== 0) && (file !== 'index.js');
 	})
-	.forEach(function (file) {
-		// load the models
+	.forEach(file => {
+		// load the models keyed by model.name
 		const model = database.instance.import(path.join(__dirname, file));
 		db[model.name] = model;
 	});
 
-// add the model relations/associations
-Object.keys(db).forEach(function (modelName) {
+// add the model relations/associations if present
+Object.keys(db).forEach(modelName => {
 	if ('associate' in db[modelName]) {
 		db[modelName].associate(db);
 	}

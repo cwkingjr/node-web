@@ -14,8 +14,7 @@ function requireAuth(req, res, next) {
 		catch(err) {
 			next(err);
 		}
-	}
-    else {
+	} else {
 		res.status(HttpStatus.UNAUTHORIZED);
 		res.json({error: "Authentication required"});
 	}

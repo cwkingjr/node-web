@@ -8,7 +8,7 @@ const NUM_HASH_ITERATIONS = 10555;
 const VERIFICATION_CODE_LENGTH = 25;
 const SALT_LENGTH = 20;
 
-function generateRandomString(stringLength) {
+function _generateRandomString(stringLength) {
 	return new Promise( (resolve, reject) => {
 		crypto.randomBytes(stringLength, (err, buf) => {
 			if (err) {
@@ -21,11 +21,11 @@ function generateRandomString(stringLength) {
 }
 
 function generateSalt() {
-	return generateRandomString(SALT_LENGTH);
+	return _generateRandomString(SALT_LENGTH);
 }
 
 function generateVerificationCode() {
-	return generateRandomString(VERIFICATION_CODE_LENGTH);
+	return _generateRandomString(VERIFICATION_CODE_LENGTH);
 }
 
 function hashPassword(password, salt) {
