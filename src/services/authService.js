@@ -1,8 +1,7 @@
 'use strict';
 
-const jwt = require('jsonwebtoken');
-
 const config = require('config');
+const jwt = require('jsonwebtoken');
 
 function createAuthToken(user) {
 	return jwt.sign(

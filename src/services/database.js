@@ -1,18 +1,20 @@
 'use strict';
 
-const config = require('config').get('database');
+const config = require('config');
 const Sequelize = require('sequelize');
 
-const options = {
+const dbConfig = config.get('database');
+const postgresOptions = {
 	dialect: 'postgres',
 	define: {
 		freezeTableName: true
 	}
 };
 
-Object.assign(options, config.options);
+// merge db options into pg options
+Object.assign(postgresOptions, dbConfig.options);
 
-const instance = new Sequelize(config.name, config.user, config.password, options);
+const instance = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, postgresOptions);
 
 module.exports = {
 	instance,
