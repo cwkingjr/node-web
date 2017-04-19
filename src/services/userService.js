@@ -14,7 +14,7 @@ const MAX_VERIFICATION_CODE_HOURS = 24;
 function isPassword(user, password) {
 	return cryptoService
 		.hashPassword(password, user.passwordSalt)
-		.then(function (hashedPassword) {
+		.then(hashedPassword => {
 			return user.passwordHash === hashedPassword;
 		});
 }
@@ -35,17 +35,17 @@ function resetForNewVerification(user) {
 		});
 }
 
-function restrictFields(users, fields) {
+function _restrictFields(users, fields) {
 	const restrict = R.pick(fields);
 	return Array.isArray(users) ? R.map(restrict, users) : restrict(users);
 }
 
 function restrictInputFields(users) {
-	return restrictFields(users, ALLOWED_INPUT_FIELDS);
+	return _restrictFields(users, ALLOWED_INPUT_FIELDS);
 }
 
 function restrictOutputFields(users) {
-	return restrictFields(users, ALLOWED_OUTPUT_FIELDS);
+	return _restrictFields(users, ALLOWED_OUTPUT_FIELDS);
 }
 
 function setAsVerified(user, password, verificationCode) {

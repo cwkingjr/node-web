@@ -16,29 +16,29 @@ class ExtendableError extends Error {
 }
 
 class BadRequestError extends ExtendableError {
-	constructor(m) {
-		super(m);
+	constructor(msg) {
+		super(msg);
 		this.status = HttpStatus.BAD_REQUEST;
 	}
 }
 
 class NotFoundError extends ExtendableError {
-	constructor(m) {
-		super(m);
+	constructor(msg) {
+		super(msg);
 		this.status = HttpStatus.NOT_FOUND;
 	}
 }
 
 class ForbiddenError extends ExtendableError {
-	constructor(m) {
-		super(m);
+	constructor(msg) {
+		super(msg);
 		this.status = HttpStatus.FORBIDDEN;
 	}
 }
 
 class UnauthorizedError extends ExtendableError {
-	constructor(m) {
-		super(m);
+	constructor(msg) {
+		super(msg);
 		this.status = HttpStatus.UNAUTHORIZED;
 	}
 }

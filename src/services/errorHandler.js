@@ -3,11 +3,6 @@
 const HttpStatus = require('http-status-codes');
 const Sequelize = require('sequelize');
 
-module.exports = {
-	handleError,
-	handleSequelizeError
-};
-
 function handleError(err, req, res, next) {
 	const status = err.status || HttpStatus.INTERNAL_SERVER_ERROR;
 	res.status(status);
@@ -29,5 +24,10 @@ function handleSequelizeError(err, req, res, next) {
 		err.status = HttpStatus.BAD_REQUEST;
 	}
 
-	return next(err);
+	next(err);
 }
+
+module.exports = {
+	handleError,
+	handleSequelizeError
+};
