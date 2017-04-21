@@ -24,7 +24,7 @@
     "eslint-prod": "eslint -c .eslintrc.prod.json src/** ./*.js; exit 0",
     "eslint-test": "eslint -c .eslintrc.test.json test/**; exit 0",
     "start": "node --harmony index.js",
-    "test": "NODE_ENV=test JASMINE_CONFIG_PATH=jasmine.json node --harmony node_modules/jasmine/bin/jasmine.js"
+    "test": "NODE_ENV=test JASMINE_CONFIG_PATH=jasmine.json nyc node --harmony node_modules/jasmine/bin/jasmine.js"
   },
   "dependencies": {
     "body-parser": "^1.13.2",
@@ -43,6 +43,7 @@
     "jasmine": "~2.5.3",
     "jasmine-expect": "^3.5.0",
     "jasmine-matchers-loader": "^0.1.0",
+    "nyc": "^10.2.0",
     "ramda": "^0.23.0",
     "request": "^2.74.0"
   }
