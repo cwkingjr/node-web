@@ -21,7 +21,6 @@
   "private": false,
   "scripts": {
     "precommit": "npm test",
-    "prepush": "npm test",
     "eslint": "npm run eslint-test; npm run eslint-prod;",
     "eslint-prod": "eslint -c .eslintrc.prod.json src/** ./*.js; exit 0",
     "eslint-test": "eslint -c .eslintrc.test.json test/**; exit 0",
