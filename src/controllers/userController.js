@@ -25,7 +25,7 @@ function login(req, res, next) {
 		.catch(next);
 }
 
-function logout(req, res, next) {
+function logout(req, res) {
 	res.clearCookie('auth_token');
 	res.redirect(200, '/user-logins');
 }
