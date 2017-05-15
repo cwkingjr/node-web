@@ -74,10 +74,10 @@ function setAsVerified(user, password, verificationCode) {
 function createUser(reqBody) {
 	return User
 		.findByEmail(reqBody.email)
-		.then( user => {
+		.then( user => { // eslint-disable-line no-unused-vars
 			return Promise.reject(new errors.ForbiddenError('Email is already in use'));
 		})
-		.catch( err => {
+		.catch( err => { // eslint-disable-line no-unused-vars
 			return User.create(reqBody);
 		});
 }

@@ -24,7 +24,7 @@ function createVerifiedBobEvans() {
 				}
 			};
 
-			request( params, (err, res, body) => {
+			request( params, (err, res, body) => { // eslint-disable-line no-unused-vars
 				if (err) {
 					return reject(err);
 				}

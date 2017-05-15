@@ -29,7 +29,7 @@ describe('POST /user-logouts', function () {
         };
 
         // login to get the auth cookie
-        request( loginParams, (err, res, body) => {
+        request( loginParams, (err, res, body) => { // eslint-disable-line no-unused-vars
             cookie = res.headers['set-cookie'][0];
 
             // logout
@@ -42,7 +42,7 @@ describe('POST /user-logouts', function () {
                 jar: cookieJar
             };
 
-            request( logoutParams, (err, res, body) => {
+            request( logoutParams, (err, res, body) => { // eslint-disable-line no-unused-vars
                 expect(res.statusCode).toBe(HttpStatus.OK);
                 expect(res.headers['set-cookie'][0]).toMatch('auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT');
                 expect(res.headers['location']).toMatch('/user-logins');

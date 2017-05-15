@@ -8,14 +8,14 @@ const {User} = require('src/models');
 
 describe('POST /user-logins verified user', function () {
 
-	beforeEach( done => {
-		User.destroy({where: {}})
-		.then(createVerifiedBobEvans)
-		.then(done)
-		.catch(done.fail);
-	});
+    beforeEach( done => {
+        User.destroy({where: {}})
+        .then(createVerifiedBobEvans)
+        .then(done)
+        .catch(done.fail);
+    });
 
-	it('processes valid email and password', done => {
+    it('processes valid email and password', done => {
 
         const params = {
             method: 'POST',
@@ -38,7 +38,7 @@ describe('POST /user-logins verified user', function () {
             //expect(cookie).toMatch("Secure");
 
             done();
-	    });
+        });
     });
 
     it('rejects invalid password', done => {
@@ -52,10 +52,10 @@ describe('POST /user-logins verified user', function () {
             }
         };
 
-        request( params, (err, res, body) => {
+        request( params, (err, res, body) => { // eslint-disable-line no-unused-vars
             expect(res.statusCode).toBe(HttpStatus.UNAUTHORIZED);
             done();
-	    });
+        });
     });
 })
 
@@ -65,15 +65,15 @@ describe('POST /user-logins unverified user', function () {
 		User.destroy({where: {}})
 		.then( () => {
             return User.create({
-			    email: 'bob@evans.com',
-			    password: 'passwordpassword',
-			    firstName: 'Bob',
-			    lastName: 'Evans'
-		    });
+                email: 'bob@evans.com',
+                password: 'passwordpassword',
+                firstName: 'Bob',
+                lastName: 'Evans'
+            });
         })
-		.then(done)
-		.catch(done.fail);
-	});
+        .then(done)
+        .catch(done.fail);
+    });
 
 	it('rejects login with valid email and password', done => {
 
@@ -86,9 +86,9 @@ describe('POST /user-logins unverified user', function () {
             }
         };
 
-        request( params, (err, res, body) => {
+        request( params, (err, res, body) => { // eslint-disable-line no-unused-vars
             expect(res.statusCode).toBe(HttpStatus.FORBIDDEN);
             done();
-	    });
+         });
     });
 })

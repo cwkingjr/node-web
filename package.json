@@ -1,6 +1,6 @@
 {
   "name": "node-web",
-  "version": "0.0.1-alpha",
+  "version": "0.0.9-alpha",
   "description": "basic node web site with user auth",
   "repository": {
     "type": "git",
@@ -18,10 +18,10 @@
     "url": "https://github.com/cwkingjr/node-web/issues"
   },
   "homepage": "https://github.com/cwkingjr/node-web#readme",
-  "private": false,
+  "private": true,
   "scripts": {
-    "precommit": "npm test",
-    "eslint": "npm run eslint-test; npm run eslint-prod;",
+    "precommit": "npm run eslint && npm test",
+    "eslint": "npm run eslint-test && npm run eslint-prod",
     "eslint-prod": "eslint -c .eslintrc.prod.json src/** ./*.js; exit 0",
     "eslint-test": "eslint -c .eslintrc.test.json test/**; exit 0",
     "start": "node --harmony index.js",
@@ -39,12 +39,12 @@
     "sequelize": "^3.24.2"
   },
   "devDependencies": {
+    "add-matchers": "^0.5.0",
     "eslint": "^3.7.0",
     "eslint-plugin-jasmine": "^2.2.0",
     "husky": "^0.13.3",
-    "jasmine": "~2.5.3",
-    "jasmine-expect": "^3.5.0",
-    "jasmine-matchers-loader": "^0.1.0",
+    "jasmine": "^2.6.0",
+    "jasmine-expect": "^3.7.0",
     "nyc": "^10.2.0",
     "ramda": "^0.23.0",
     "request": "^2.74.0"
