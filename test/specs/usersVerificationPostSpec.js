@@ -2,7 +2,7 @@
 
 const HttpStatus = require('http-status-codes');
 
-const request = require('test/request');
+const request = require('test/requestConfig');
 const {User} = require('src/models');
 
 describe('POST /user-verifications', function () {

@@ -2,7 +2,7 @@
 
 require('rootpath')();
 
-const request = require('test/request');
+const request = require('test/requestConfig');
 const {User} = require('src/models');
 
 function createVerifiedBobEvans() {
