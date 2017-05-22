@@ -1,6 +1,6 @@
 'use strict';
 
-const request = require('test/request');
+const request = require('test/requestConfig');
 const {User} = require('src/models');
 const {createVerifiedBobEvans} = require('test/helpers/usersHelper');
 
