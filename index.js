@@ -1,4 +1,4 @@
 'use strict';
 
 require('rootpath')();
-require('/src/server').start();
+require('src/server').start();

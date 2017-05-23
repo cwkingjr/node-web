@@ -83,16 +83,26 @@ function createUser(reqBody) {
 }
 
 async function loginUser(email, password) {
-	let user = await User.findByEmail(email);
-	let pwMatches = await isPassword(user, password);
 
-	if (pwMatches !== true ) {
-		return Promise.reject(new errors.UnauthorizedError('Password incorrect'));
+	const BAD_UN_OR_PW_MESSAGE = 'Username or password incorrect';
+
+	try {
+		let user = await User.findByEmail(email);
+		let pwMatches = await isPassword(user, password);
+		
+		if (pwMatches !== true ) {
+			return Promise.reject(new errors.UnauthorizedError(BAD_UN_OR_PW_MESSAGE));
+		}
+
+		if (user.isVerified !== true) {
+			return Promise.reject(new errors.ForbiddenError('User is not verified'));
+		}
+
+		return Promise.resolve(user);
 	}
-	if (user.isVerified !== true) {
-		return Promise.reject(new errors.ForbiddenError('User is not verified'));
+	catch(err) {
+		return Promise.reject(new errors.UnauthorizedError(BAD_UN_OR_PW_MESSAGE));
 	}
-	return Promise.resolve(user);
 }
 
 function verifyUser(email, password, verificationCode) {
