@@ -88,6 +88,33 @@ describe('POST /user-logins unverified user', function () {
 
         request( params, (err, res, body) => { // eslint-disable-line no-unused-vars
             expect(res.statusCode).toBe(HttpStatus.FORBIDDEN);
+            expect(body.message).toBe('User is not verified');
+            done();
+         });
+    });
+})
+
+describe('POST /user-logins unknown user', function () {
+
+	beforeEach( done => {
+		User.destroy({where: {}})
+        .then(done)
+        .catch(done.fail);
+    });
+
+	it('rejects login with invalid email', done => {
+
+        const params = {
+            method: 'POST',
+            url: '/user-logins',
+            body: {
+                email: 'who@knows.com',
+                password: 'passwordpassword'
+            }
+        };
+
+        request( params, (err, res, body) => { // eslint-disable-line no-unused-vars
+            expect(res.statusCode).toBe(HttpStatus.UNAUTHORIZED);
             done();
          });
     });

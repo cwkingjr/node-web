@@ -30,14 +30,23 @@ async function start() {
 	// Make sure the db is synced before starting the http server to ensure
 	// a request isn't accepted prior to any database structure changes being
 	// applied.
-	if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'test') {
-		// force the db sync
-		await db.instance.sync({force:true});
-	} else {
-		// error on DDL changes -- expect devops to migrate prod
-		await db.instance.sync();
-	}
-	
+    try {
+        if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'test') {
+            // force the db sync
+            await db.instance.sync({force:true});
+        } else {
+            // error on DDL changes -- expect devops to migrate prod
+            await db.instance.sync();
+        }
+    }
+    catch(err) {
+		/* eslint-disable */
+        console.log('ERROR: Problem with db.instance.sync');
+        console.log(err.name, err.message);
+		/* eslint-enable */
+        process.exit(0);
+    }
+
 	return new Promise(resolve => {
 		const port = config.get('server.port');
 		const server = app.listen(port, () => {
