@@ -1,6 +1,6 @@
 'use strict';
 
-const matchers = require('jasmine-expect'); // eslint-disable-line no-unused-vars
+require('jasmine-expect');
 const addMatchers = require('add-matchers');
 const R = require('ramda');
 
