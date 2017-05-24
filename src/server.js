@@ -8,6 +8,7 @@ const express = require('express');
 const db = require('src/models');
 const errorHandler = require('src/services/errorHandler');
 const routes = require('src/routes');
+const winston = require('src/winstonConfig');
 
 module.exports = {
 	start
@@ -40,20 +41,15 @@ async function start() {
         }
     }
     catch(err) {
-		/* eslint-disable */
-        console.log('ERROR: Problem with db.instance.sync');
-        console.log(err.name, err.message);
-		/* eslint-enable */
+        winston.error('Problem with db.instance.sync', { name: err.name, message: err.message });
         process.exit(0);
     }
 
 	return new Promise(resolve => {
 		const port = config.get('server.port');
 		const server = app.listen(port, () => {
-			/* eslint-disable */
-			console.log(`Starting app with environment of [${process.env.NODE_ENV}]`);
-			console.log(`Server listening on port [${server.address().port}]`);
-			/* eslint-enable */
+			winston.info(`Starting app with environment of [${process.env.NODE_ENV}]`);
+			winston.info(`Server listening on port [${server.address().port}]`);
 			resolve(server);
 		});
 	});
