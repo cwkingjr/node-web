@@ -18,16 +18,12 @@ function login(req, res, next) {
 	userService
 		.loginUser(req.body.email, req.body.password)
 		.then(userService.restrictOutputFields)
-		.then( user => {
-			res.cookie('auth_token', authService.createAuthToken(user), cookieOptions);
-			return res.json(user);
-		})
+		.then(user => res.cookie('auth_token', authService.createAuthToken(user), cookieOptions).json(user))
 		.catch(next);
 }
 
 function logout(req, res) {
-	res.clearCookie('auth_token');
-	res.redirect(200, '/user-logins');
+	res.clearCookie('auth_token').redirect(HttpStatus.OK, '/user-logins');
 }
 
 function list(req, res, next) {
@@ -43,10 +39,7 @@ function register(req, res, next) {
 		.createUser(userService.restrictInputFields(req.body))
 		.then(emailService.sendUserVerificationEmail)
 		.then(userService.restrictOutputFields)
-		.then(user => {
-			res.status(HttpStatus.CREATED);
-			res.json(user);
-		})
+		.then(user => res.status(HttpStatus.CREATED).json(user))
 		.catch(next);
 }
 
@@ -54,10 +47,7 @@ function verify(req, res, next) {
 	userService
 		.verifyUser(req.body.email, req.body.password, req.body.verificationCode)
 		.then(userService.restrictOutputFields)
-		.then( user => {
-			res.cookie('auth_token', authService.createAuthToken(user), cookieOptions);
-			return res.json(user);
-		})
+		.then(user => res.cookie('auth_token', authService.createAuthToken(user), cookieOptions).json(user))
 		.catch(next);
 }
 
